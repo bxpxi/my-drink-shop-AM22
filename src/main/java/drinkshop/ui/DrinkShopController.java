@@ -48,10 +48,10 @@ public class DrinkShopController {
 
     @FXML private Label lblTotalRevenue;
 
-    private ObservableList<Product> productList = FXCollections.observableArrayList();
-    private ObservableList<Reteta> retetaList = FXCollections.observableArrayList();
-    private ObservableList<IngredientReteta> newRetetaList = FXCollections.observableArrayList();
-    private ObservableList<OrderItem> currentOrderItems = FXCollections.observableArrayList();
+    private final ObservableList<Product> productList = FXCollections.observableArrayList();
+    private final ObservableList<Reteta> retetaList = FXCollections.observableArrayList();
+    private final ObservableList<IngredientReteta> newRetetaList = FXCollections.observableArrayList();
+    private final ObservableList<OrderItem> currentOrderItems = FXCollections.observableArrayList();
 
     private Order currentOrder = new Order(1);
 
@@ -111,7 +111,7 @@ public class DrinkShopController {
     // ---------- PRODUCT ----------
     @FXML
     private void onAddProduct() {
-        Reteta r=retetaTable.getSelectionModel().getSelectedItem();
+        Reteta r = retetaTable.getSelectionModel().getSelectedItem();
 
         if (r == null) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -119,19 +119,36 @@ public class DrinkShopController {
             alert.setHeaderText("Selectati o reteta pentru care adugati un produs");
             alert.showAndWait();
             return;
-        }else
-        if (service.getAllProducts().stream().filter(p->p.getId()==r.getId()).toList().size()>0) {
+        }
+
+        if (service.getAllProducts().stream().anyMatch(p -> p.getId() == r.getId())) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Error");
             alert.setHeaderText("Exista un produs cu reteta adaugata.");
             alert.showAndWait();
             return;
         }
-        Product p = new Product(r.getId(),
-                txtProdName.getText(),
-                Double.parseDouble(txtProdPrice.getText()),
+
+        String name = txtProdName.getText();
+        if (name == null || name.trim().isEmpty()) {
+            showError("Nume produs este obligatoriu.");
+            return;
+        }
+
+        if (!requireNotNull(comboProdCategorie.getValue(), "Selectează categoria produsului.")) return;
+        if (!requireNotNull(comboProdTip.getValue(), "Selectează tipul produsului.")) return;
+
+        Double price = readPositiveDouble(txtProdPrice, "Preț");
+        if (price == null) return;
+
+        Product p = new Product(
+                r.getId(),
+                name.trim(),
+                price,
                 comboProdCategorie.getValue(),
-                comboProdTip.getValue());
+                comboProdTip.getValue()
+        );
+
         service.addProduct(p);
         initData();
     }
@@ -139,36 +156,78 @@ public class DrinkShopController {
     @FXML
     private void onUpdateProduct() {
         Product selected = productTable.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
-        service.updateProduct(selected.getId(), txtProdName.getText(),
-                Double.parseDouble(txtProdPrice.getText()),
-                comboProdCategorie.getValue(), comboProdTip.getValue());
+        if (selected == null) {
+            showError("Selectează produsul pe care vrei să îl modifici.");
+            return;
+        }
+
+        String name = txtProdName.getText();
+        if (name == null || name.trim().isEmpty()) {
+            showError("Nume produs este obligatoriu.");
+            return;
+        }
+
+        if (!requireNotNull(comboProdCategorie.getValue(), "Selectează categoria produsului.")) return;
+        if (!requireNotNull(comboProdTip.getValue(), "Selectează tipul produsului.")) return;
+
+        Double price = readPositiveDouble(txtProdPrice, "Preț");
+        if (price == null) return;
+
+        service.updateProduct(
+                selected.getId(),
+                name.trim(),
+                price,
+                comboProdCategorie.getValue(),
+                comboProdTip.getValue()
+        );
         initData();
     }
 
     @FXML
     private void onDeleteProduct() {
         Product selected = productTable.getSelectionModel().getSelectedItem();
-        if (selected == null) return;
+        if (selected == null) {
+            showError("Selectează produsul pe care vrei să îl ștergi.");
+            return;
+        }
         service.deleteProduct(selected.getId());
         initData();
     }
 
     @FXML
     private void onFilterCategorie() {
+        if (comboProdCategorie.getValue() == null) {
+            productList.setAll(service.getAllProducts());
+            return;
+        }
         productList.setAll(service.filtreazaDupaCategorie(comboProdCategorie.getValue()));
     }
 
     @FXML
     private void onFilterTip() {
+        if (comboProdTip.getValue() == null) {
+            productList.setAll(service.getAllProducts());
+            return;
+        }
         productList.setAll(service.filtreazaDupaTip(comboProdTip.getValue()));
     }
 
     // ---------- RETETA NOUA ----------
     @FXML
     private void onAddNewIngred() {
-        newRetetaList.add(new IngredientReteta(txtNewIngredName.getText(),
-                Double.parseDouble(txtNewIngredCant.getText())));
+        String den = txtNewIngredName.getText();
+        if (den == null || den.trim().isEmpty()) {
+            showError("Denumire ingredient este obligatorie.");
+            return;
+        }
+
+        Double cant = readPositiveDouble(txtNewIngredCant, "Cantitate ingredient");
+        if (cant == null) return;
+
+        newRetetaList.add(new IngredientReteta(den.trim(), cant));
+
+        txtNewIngredName.clear();
+        txtNewIngredCant.clear();
     }
 
     @FXML
@@ -179,7 +238,11 @@ public class DrinkShopController {
 
     @FXML
     private void onAddNewReteta() {
-        Reteta r = new Reteta(service.getAllRetete().size()+1, new ArrayList<>(newRetetaList));
+        if (newRetetaList.isEmpty()) {
+            showError("Adaugă cel puțin un ingredient în rețetă.");
+            return;
+        }
+        Reteta r = new Reteta(service.getAllRetete().size() + 1, new ArrayList<>(newRetetaList));
         service.addReteta(r);
         newRetetaList.clear();
         initData();
@@ -255,5 +318,32 @@ public class DrinkShopController {
     private void showError(String msg) {
         Alert alert = new Alert(Alert.AlertType.ERROR, msg, ButtonType.OK);
         alert.showAndWait();
+    }
+
+    private Double readPositiveDouble(TextField field, String fieldName) {
+        String raw = field.getText();
+        if (raw == null || raw.trim().isEmpty()) {
+            showError(fieldName + " este obligatoriu.");
+            return null;
+        }
+        try {
+            double v = Double.parseDouble(raw.trim());
+            if (v <= 0) {
+                showError(fieldName + " trebuie să fie > 0.");
+                return null;
+            }
+            return v;
+        } catch (NumberFormatException ex) {
+            showError(fieldName + " trebuie să fie un număr valid.");
+            return null;
+        }
+    }
+
+    private boolean requireNotNull(Object v, String msg) {
+        if (v == null) {
+            showError(msg);
+            return false;
+        }
+        return true;
     }
 }

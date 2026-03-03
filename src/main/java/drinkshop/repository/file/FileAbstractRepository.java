@@ -7,37 +7,61 @@ import java.io.*;
 public abstract class FileAbstractRepository<ID, E>
         extends AbstractRepository<ID, E> {
 
-    protected String fileName;
+    protected final String fileName;
 
     public FileAbstractRepository(String fileName) {
         this.fileName = fileName;
-        //loadFromFile();
+        // Important: keep constructor light; call loadFromFile() from subclasses/services/bootstrap
+        // loadFromFile();
     }
 
     protected void loadFromFile() {
-        try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+        File f = new File(fileName);
 
-            String line;
-            while ((line = br.readLine()) != null) {
-                E entity = extractEntity(line);
-                super.save(entity);
+        try {
+            File parent = f.getParentFile();
+            if (parent != null && !parent.exists()) {
+                parent.mkdirs();
+            }
+
+            if (!f.exists()) {
+                // First run: create empty file; keep repo empty
+                f.createNewFile();
+                return;
+            }
+
+            try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+                String line;
+                while ((line = br.readLine()) != null) {
+                    if (line.trim().isEmpty()) continue;
+                    E entity = extractEntity(line);
+                    super.save(entity);
+                }
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new UncheckedIOException("Eroare la citirea fișierului: " + fileName, e);
         }
     }
 
     private void writeToFile() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(fileName))) {
+        File f = new File(fileName);
 
-            for (E entity : entities.values()) {
-                bw.write(createEntityAsString(entity));
-                bw.newLine();
+        try {
+            File parent = f.getParentFile();
+            if (parent != null && !parent.exists()) {
+                parent.mkdirs();
+            }
+
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+                for (E entity : entities.values()) {
+                    bw.write(createEntityAsString(entity));
+                    bw.newLine();
+                }
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new UncheckedIOException("Eroare la scrierea fișierului: " + fileName, e);
         }
     }
 
