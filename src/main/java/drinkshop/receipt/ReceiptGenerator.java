@@ -13,11 +13,13 @@ public class ReceiptGenerator {
         sb.append("RECEIPT").append('\n');
         sb.append("Order ID: ").append(order.getId()).append('\n');
 
-        for (OrderItem item : order.getItems()) {
-            sb.append(item.getProduct().getNume())
-                    .append(" x ")
-                    .append(item.getQuantity())
-                    .append('\n');
+        if(order.getItems()!=null) {
+            for (OrderItem item : order.getItems()) {
+                sb.append(item.getProduct().getNume())
+                        .append(" x ")
+                        .append(item.getQuantity())
+                        .append('\n');
+            }
         }
 
         sb.append("Total: ").append(order.getTotalPrice()).append('\n');
