@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/><title>testspec Proiect231 - bpir3489_BBT</title>
+<link type="text/css" rel="stylesheet" href="https://www.scs.ubbcluj.ro/testlink/gui/themes/default/css/tl_documents.css" />
+<style type="text/css" media="print">.notprintable { display:none;}</style>
+</head>
+<body>
+<div>
+<div style="float:right;">TestLink Community [configure $tlCfg-&gt;document_generator-&gt;company_name]</div>
+<div>&nbsp;</div><hr />
+<p style="text-align: center;"><img alt="TestLink logo" title="configure using $tlCfg->document_generator->company_logo"  width= height= src="https://www.scs.ubbcluj.ro/testlink/gui/themes/default/images/tl-logo-transparent-25.png" /></p></div>
+<div class="doc_title"><p>Test Specification</p></div>
+<div class="doc_title" style="text-align:left;margin: auto;"><p>Test Project: Proiect231<br/>Test Suite: Proiect231 - bpir3489_BBT</p></div>
+<div class="summary"><p id="printedby">Printed by TestLink on 13/03/2026</p></div>
+<div class="pagefooter" id="copyright">2012 &copy; TestLink Community</div>
+<h1 class="general" style="page-break-before: always">Table Of Contents</h1><div class="toc"><p style="padding-left: 20px;"><b><a href="#toc_1">1.bpir3489_BBT</a></b></p>
+<p style="padding-left: 45px;"><a href="#toc_tc27792">P231-1: TC_ECP_Valid_Add_Product</a></p><p style="padding-left: 45px;"><a href="#toc_tc27795">P231-2: TC_ECP_Invalid_Add_Product</a></p><p style="padding-left: 45px;"><a href="#toc_tc27798">P231-3: TC_BVA_Valid_Add_Product</a></p><p style="padding-left: 45px;"><a href="#toc_tc27801">P231-4: TC_BVA_Invalid_Add_Product</a></p></div><h1 class="doclevel" >Scope</h1>
+<div class="txtlevel"><p>Proiect de testare pentru studentii din grupa 231.</p></div>
+ <br/><a name='toc_1'></a>
+<h1 class='doclevel'>1.Test Suite : bpir3489_BBT</h1>
+<div><p>Test suite for black-box testing of F01 &ndash; Add Product functionality.<br />
+Test design techniques: Equivalence Class Partitioning (ECP) and Boundary Value Analysis (BVA).</p>
+</div><a name="toc_tc27792"></a><p>&nbsp;</p><div> <table class="tc" width="90%" ><tr><th colspan="4">Test Case P231-1: TC_ECP_Valid_Add_Product&nbsp;<span style="font-size: 80%;">[Version  : 1]</span></th></tr>
+<tr><td width="20%" valign="top"><span class="label">Author:</span></td><td colspan="3">bpir3489@scs.ubbcluj.ro</td></tr>
+<tr><td colspan="4"><span class="label">Summary:</span><br /><p>Verify that a product can be successfully added when all input data is valid.</p>
+</td></tr><tr><td colspan="4"><span class="label">Preconditions:</span><br /><p>The system is running and the user can access the Add Product functionality.</p>
+</td></tr><tr><td><span class="label">#:</span></td><td><span class="label">Step actions:</span></td><td><span class="label">Expected Results:</span></td></tr><tr><td width="5">1</td><td><p>Enter valid product data (id, name, price, category, type) and execute the Add Product operation.</p>
+</td><td><p>The product is successfully added to the system and appears in the product list.</p>
+</td></tr><tr><td width="20%" valign="top"><span class="label">Execution type:</span></td><td colspan="3">Manual</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Estimated exec. duration (min):</span></td><td colspan="3"></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Importance:</span></td><td colspan="3">Medium</td></tr>
+<tr><td colspan="4"></td></tr><tr><td > name of the autotest class:</td><td  colspan = "3" ></td></tr>
+<tr><td > name of the test method:</td><td  colspan = "3" ></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Requirements</span><td colspan="3">bpir3489_F01:  F01_Add_Product [Version : 1]<br /></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Keywords:</span></td><td colspan="3">&nbsp;None<br/></td></tr>
+</table>
+</div>
+<a name="toc_tc27795"></a><p>&nbsp;</p><div> <table class="tc" width="90%" ><tr><th colspan="4">Test Case P231-2: TC_ECP_Invalid_Add_Product&nbsp;<span style="font-size: 80%;">[Version  : 1]</span></th></tr>
+<tr><td width="20%" valign="top"><span class="label">Author:</span></td><td colspan="3">bpir3489@scs.ubbcluj.ro</td></tr>
+<tr><td colspan="4"><span class="label">Summary:</span><br /><p>Verify that the system rejects adding a product when invalid input data is provided.</p>
+</td></tr><tr><td colspan="4"><span class="label">Preconditions:</span><br /><p>The system is running and the user can access the Add Product functionality.</p>
+</td></tr><tr><td><span class="label">#:</span></td><td><span class="label">Step actions:</span></td><td><span class="label">Expected Results:</span></td></tr><tr><td width="5">1</td><td><p>Enter invalid product data (for example empty name or negative price) and execute the Add Product operation.</p>
+</td><td><p>The system rejects the input and the product is not added to the system.</p>
+</td></tr><tr><td width="20%" valign="top"><span class="label">Execution type:</span></td><td colspan="3">Manual</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Estimated exec. duration (min):</span></td><td colspan="3"></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Importance:</span></td><td colspan="3">Medium</td></tr>
+<tr><td colspan="4"></td></tr><tr><td > name of the autotest class:</td><td  colspan = "3" ></td></tr>
+<tr><td > name of the test method:</td><td  colspan = "3" ></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Requirements</span><td colspan="3">bpir3489_F01:  F01_Add_Product [Version : 1]<br /></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Keywords:</span></td><td colspan="3">&nbsp;None<br/></td></tr>
+</table>
+</div>
+<a name="toc_tc27798"></a><p>&nbsp;</p><div> <table class="tc" width="90%" ><tr><th colspan="4">Test Case P231-3: TC_BVA_Valid_Add_Product&nbsp;<span style="font-size: 80%;">[Version  : 1]</span></th></tr>
+<tr><td width="20%" valign="top"><span class="label">Author:</span></td><td colspan="3">bpir3489@scs.ubbcluj.ro</td></tr>
+<tr><td colspan="4"><span class="label">Summary:</span><br /><p>Verify that a product can be added when the price is at the valid boundary value.</p>
+</td></tr><tr><td colspan="4"><span class="label">Preconditions:</span><br /><p>The system is running and the user can access the Add Product functionality.</p>
+</td></tr><tr><td><span class="label">#:</span></td><td><span class="label">Step actions:</span></td><td><span class="label">Expected Results:</span></td></tr><tr><td width="5">1</td><td><p>Enter product data where the price is at the minimum valid boundary value and execute the Add Product operation.</p>
+</td><td><p>The product is successfully added to the system.</p>
+</td></tr><tr><td width="20%" valign="top"><span class="label">Execution type:</span></td><td colspan="3">Manual</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Estimated exec. duration (min):</span></td><td colspan="3"></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Importance:</span></td><td colspan="3">Medium</td></tr>
+<tr><td colspan="4"></td></tr><tr><td > name of the autotest class:</td><td  colspan = "3" ></td></tr>
+<tr><td > name of the test method:</td><td  colspan = "3" ></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Requirements</span><td colspan="3">bpir3489_F01:  F01_Add_Product [Version : 1]<br /></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Keywords:</span></td><td colspan="3">&nbsp;None<br/></td></tr>
+</table>
+</div>
+<a name="toc_tc27801"></a><p>&nbsp;</p><div> <table class="tc" width="90%" ><tr><th colspan="4">Test Case P231-4: TC_BVA_Invalid_Add_Product&nbsp;<span style="font-size: 80%;">[Version  : 1]</span></th></tr>
+<tr><td width="20%" valign="top"><span class="label">Author:</span></td><td colspan="3">bpir3489@scs.ubbcluj.ro</td></tr>
+<tr><td colspan="4"><span class="label">Summary:</span><br /><p>Verify that the system rejects adding a product when the price is below the minimum allowed boundary value.</p>
+</td></tr><tr><td colspan="4"><span class="label">Preconditions:</span><br /><p>The system is running and the user can access the Add Product functionality.</p>
+</td></tr><tr><td><span class="label">#:</span></td><td><span class="label">Step actions:</span></td><td><span class="label">Expected Results:</span></td></tr><tr><td width="5">1</td><td><p>Enter product data where the price is below the minimum allowed boundary value and execute the Add Product operation.</p>
+</td><td><p>The system rejects the input and the product is not added to the system.</p>
+</td></tr><tr><td width="5">2</td><td></td><td></td></tr><tr><td width="20%" valign="top"><span class="label">Execution type:</span></td><td colspan="3">Manual</td></tr>
+<tr><td width="20%" valign="top"><span class="label">Estimated exec. duration (min):</span></td><td colspan="3"></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Importance:</span></td><td colspan="3">Medium</td></tr>
+<tr><td colspan="4"></td></tr><tr><td > name of the autotest class:</td><td  colspan = "3" ></td></tr>
+<tr><td > name of the test method:</td><td  colspan = "3" ></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Requirements</span><td colspan="3">bpir3489_F01:  F01_Add_Product [Version : 1]<br /></td></tr>
+<tr><td width="20%" valign="top"><span class="label">Keywords:</span></td><td colspan="3">&nbsp;None<br/></td></tr>
+</table>
+</div>
+
+</body>
+</html>
