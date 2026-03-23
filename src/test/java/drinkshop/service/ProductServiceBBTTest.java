@@ -29,11 +29,12 @@ class ProductServiceBBTTest {
         productService = new ProductService(repo);
     }
 
+    // -------------------- ECP --------------------
+
     @Test
     @Tag("ECP")
     @DisplayName("ECP valid: addProduct adds a valid product")
     void addProduct_ECP_valid_shouldAddProduct() {
-        // Arrange
         Product product = new Product(
                 101,
                 "Cola",
@@ -42,46 +43,167 @@ class ProductServiceBBTTest {
                 TipBautura.WATER_BASED
         );
 
-        // Act
         productService.addProduct(product);
 
-        // Assert
         Product saved = productService.findById(101);
 
         assertAll(
                 () -> assertNotNull(saved),
                 () -> assertEquals("Cola", saved.getNume()),
                 () -> assertEquals(10.0, saved.getPret()),
-                () -> assertEquals(CategorieBautura.JUICE, saved.getCategorie()),
-                () -> assertEquals(TipBautura.WATER_BASED, saved.getTip()),
                 () -> assertEquals(1, productService.getAllProducts().size())
         );
     }
 
     @Test
-    @Tag("BVA")
-    @DisplayName("BVA invalid: addProduct rejects price equal to 0")
-    void addProduct_BVA_invalid_priceZero_shouldThrowValidationException() {
-        // Arrange
+    @Tag("ECP")
+    @DisplayName("ECP invalid: null name should be rejected")
+    void addProduct_ECP_invalid_nullName_shouldThrowException() {
         Product product = new Product(
                 102,
+                null,
+                10.0,
+                CategorieBautura.JUICE,
+                TipBautura.WATER_BASED
+        );
+
+        assertThrows(ValidationException.class,
+                () -> productService.addProduct(product));
+
+        assertTrue(productService.getAllProducts().isEmpty());
+    }
+    @Test
+    @Tag("ECP")
+    @DisplayName("ECP Invalid: empty name should be rejected")
+    void addProduct_ECP_empty_name_shouldThrowException() {
+        Product product = new Product(
+                103,
+                "",
+                10.0,
+                CategorieBautura.JUICE,
+                TipBautura.WATER_BASED
+        );
+
+        assertThrows(ValidationException.class,
+                () -> productService.addProduct(product));
+
+        assertTrue(productService.getAllProducts().isEmpty());
+    }
+
+    @Test
+    @Tag("ECP")
+    @DisplayName("ECP valid: add another valid product")
+    void addProduct_ECP_anotherValid_shouldAddProduct() {
+        Product product = new Product(
+                104,
+                "Fanta",
+                8.0,
+                CategorieBautura.JUICE,
+                TipBautura.WATER_BASED
+        );
+
+        productService.addProduct(product);
+
+        Product saved = productService.findById(104);
+
+        assertAll(
+                () -> assertNotNull(saved),
+                () -> assertEquals("Fanta", saved.getNume()),
+                () -> assertEquals(8.0, saved.getPret()),
+                () -> assertEquals(1, productService.getAllProducts().size())
+        );
+    }
+
+    @Test
+    @Tag("ECP")
+    @DisplayName("ECP invalid: negative price should be rejected")
+    void addProduct_ECP_invalid_negativePrice_shouldThrowException() {
+        Product product = new Product(
+                105,
                 "Sprite",
+                -5.0,
+                CategorieBautura.JUICE,
+                TipBautura.WATER_BASED
+        );
+
+        assertThrows(ValidationException.class,
+                () -> productService.addProduct(product));
+
+        assertNull(productService.findById(105));
+    }
+
+    // -------------------- BVA --------------------
+    @Test
+    @Tag("BVA")
+    @DisplayName("BVA invalid: price = 0")
+    void addProduct_BVA_invalid_priceZero_shouldThrowValidationException() {
+        Product product = new Product(
+                106,
+                "Cola",
                 0.0,
                 CategorieBautura.JUICE,
                 TipBautura.WATER_BASED
         );
 
-        // Act
-        ValidationException exception = assertThrows(
-                ValidationException.class,
-                () -> productService.addProduct(product)
+        assertThrows(ValidationException.class,
+                () -> productService.addProduct(product));
+        assertTrue(productService.getAllProducts().isEmpty());
+    }
+
+    @Test
+    @Tag("BVA")
+    @DisplayName("BVA valid: price = 0.01")
+    void addProduct_BVA_valid_priceJustAboveZero_shouldAddProduct() {
+        Product product = new Product(
+                107,
+                "Sprite",
+                0.01,
+                CategorieBautura.JUICE,
+                TipBautura.WATER_BASED
         );
 
-        // Assert
-        assertAll(
-                () -> assertTrue(exception.getMessage().contains("Pret invalid!")),
-                () -> assertTrue(productService.getAllProducts().isEmpty()),
-                () -> assertNull(productService.findById(102))
+        productService.addProduct(product);
+
+        Product saved = productService.findById(107);
+        assertNotNull(saved);
+        assertEquals("Sprite", saved.getNume());
+        assertEquals(0.01, saved.getPret());
+    }
+
+    @Test
+    @Tag("BVA")
+    @DisplayName("BVA invalid: empty name")
+    void addProduct_BVA_invalid_emptyName_shouldThrowValidationException() {
+        Product product = new Product(
+                108,
+                "",
+                10.0,
+                CategorieBautura.JUICE,
+                TipBautura.WATER_BASED
         );
+
+        assertThrows(ValidationException.class,
+                () -> productService.addProduct(product));
+        assertTrue(productService.getAllProducts().isEmpty());
+    }
+
+    @Test
+    @Tag("BVA")
+    @DisplayName("BVA valid: name = 'A'")
+    void addProduct_BVA_valid_nameA_shouldAddProduct() {
+        Product product = new Product(
+                109,
+                "A",
+                10.0,
+                CategorieBautura.JUICE,
+                TipBautura.WATER_BASED
+        );
+
+        productService.addProduct(product);
+
+        Product saved = productService.findById(109);
+        assertNotNull(saved);
+        assertEquals("A", saved.getNume());
+        assertEquals(10.0, saved.getPret());
     }
 }
